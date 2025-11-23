@@ -10,7 +10,6 @@ branches:
 
   develop:
     regex: ^develop$
-    mode: ContinuousDeployment
     increment: Patch
     label: alpha
 

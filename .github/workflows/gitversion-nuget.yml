@@ -1,0 +1,62 @@
+name: GitVersion NuGet test
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build-and-pack:
+    runs-on: ubuntu-latest
+
+    env:
+      NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "8.0.x"
+
+      - name: Install GitVersion
+        uses: GitTools/actions/gitversion/setup@v0
+        with:
+          versionSpec: "6.x"
+
+      - name: Run GitVersion
+        id: gitversion
+        uses: GitTools/actions/gitversion/execute@v0
+        with:
+          useConfigFile: true
+
+      - name: Show GitVersion variables
+        run: |
+          echo "GitVersion BranchName    = ${{ steps.gitversion.outputs.branchName }}"
+          echo "GitVersion SemVer        = ${{ steps.gitversion.outputs.semVer }}"
+          echo "GitVersion FullSemVer    = ${{ steps.gitversion.outputs.fullSemVer }}"
+
+      - name: Select package version
+        id: select_version
+        run: |
+          echo "GitHub ref name = ${GITHUB_REF_NAME}"
+          if [ "${GITHUB_REF_NAME}" = "main" ] || [ "${GITHUB_REF_NAME}" = "develop" ]; then
+            VERSION="${{ steps.gitversion.outputs.semVer }}"
+          else
+            FULL="${{ steps.gitversion.outputs.fullSemVer }}"
+            VERSION="${FULL//+/.}"
+          fi
+          echo "Using package version: ${VERSION}"
+          echo "PACKAGE_VERSION=${VERSION}" >> $GITHUB_ENV
+
+      - name: Restore
+        run: dotnet restore src/DummyPackage/DummyPackage.csproj
+
+      - name: Pack
+        run: dotnet pack src/DummyPackage/DummyPackage.csproj -c Release -o out /p:PackageVersion=${PACKAGE_VERSION}
+
+      - name: Publish to nuget.org
+        if: env.NUGET_API_KEY != ''
+        run: dotnet nuget push "out/Andonyan.TestingVersioning.Dummy.${PACKAGE_VERSION}.nupkg" --api-key "${NUGET_API_KEY}" --source "https://api.nuget.org/v3/index.json"

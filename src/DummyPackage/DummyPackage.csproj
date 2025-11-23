@@ -1,0 +1,9 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <PackageId>Andonyan.TestingVersioning.Dummy</PackageId>
+    <Authors>andonyan</Authors>
+    <Description>Dummy package for GitVersion CI testing</Description>
+  </PropertyGroup>
+</Project>
