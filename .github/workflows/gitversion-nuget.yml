@@ -51,6 +51,17 @@ jobs:
           echo "Using package version: ${VERSION}"
           echo "PACKAGE_VERSION=${VERSION}" >> $GITHUB_ENV
 
+      - name: Create and push tag
+        if: github.ref == 'refs/heads/develop'
+        run: |
+          TAG="${PACKAGE_VERSION}"
+          if git rev-parse "$TAG" >/dev/null 2>&1; then
+              echo "Tag $TAG already exists, skipping."
+          else
+              git tag "$TAG" -a -m "GitVersion tag from CI"
+              git push origin "$TAG"
+          fi
+
       - name: Restore
         run: dotnet restore src/DummyPackage/DummyPackage.csproj
 
