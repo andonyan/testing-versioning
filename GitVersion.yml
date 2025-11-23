@@ -1,6 +1,6 @@
 mode: ContinuousDeployment
 tag-prefix: ""
-commit-message-incrementing: Disabled
+commit-message-incrementing: Enabled
 
 branches:
   main:
