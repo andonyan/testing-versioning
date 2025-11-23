@@ -15,5 +15,6 @@ branches:
 
   feature:
     regex: '^features?[\/-](?<BranchName>.+)'
+    mode: ContinuousDeployment
     label: "{BranchName}"
     increment: Patch
