@@ -1,22 +1,19 @@
-mode: ContinuousDelivery
+mode: ContinuousDeployment
 tag-prefix: ""
 commit-message-incrementing: Disabled
 
 branches:
   main:
     regex: ^main$
-    mode: ContinuousDeployment
-    label: alpha
+    label:
     increment: Patch
 
   develop:
     regex: ^develop$
-    mode: ContinuousDeployment
     label: alpha
     increment: Patch
 
   feature:
     regex: '^features?[\/-](?<BranchName>.+)'
-    mode: ContinuousDeployment
     label: "{BranchName}"
     increment: Patch
