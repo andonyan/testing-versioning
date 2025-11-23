@@ -1,19 +1,20 @@
 mode: ContinuousDeployment
 tag-prefix: ""
-commit-message-incrementing: Disabled
+commit-message-incrementing: Enabled
 
 branches:
   main:
     regex: ^main$
-    label:
     increment: Patch
+    label: ""
 
   develop:
     regex: ^develop$
-    label: alpha
+    mode: ContinuousDeployment
     increment: Patch
+    label: alpha
 
   feature:
     regex: '^features?[\/-](?<BranchName>.+)'
-    label: "{BranchName}"
     increment: Patch
+    label: "{BranchName}"
