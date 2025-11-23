@@ -5,16 +5,17 @@ commit-message-incrementing: Disabled
 branches:
   main:
     regex: ^main$
-    label:
     increment: Patch
+    label: ""
 
   develop:
     regex: ^develop$
-    label: alpha
+    mode: ContinuousDeployment
     increment: Patch
+    label: alpha
 
   feature:
     regex: '^features?[\/-](?<BranchName>.+)'
     mode: ContinuousDeployment
-    label: "{BranchName}"
     increment: Patch
+    label: "{BranchName}"
