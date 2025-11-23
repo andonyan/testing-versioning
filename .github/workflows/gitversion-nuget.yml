@@ -51,6 +51,11 @@ jobs:
           echo "Using package version: ${VERSION}"
           echo "PACKAGE_VERSION=${VERSION}" >> $GITHUB_ENV
 
+      - name: Configure git user
+        run: |
+          git config --global user.name "${{ github.actor }}"
+          git config --global user.email "${{ github.actor }}@users.noreply.github.com"
+
       - name: Create and push tag
         if: github.ref == 'refs/heads/develop'
         run: |
