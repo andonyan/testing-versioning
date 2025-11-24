@@ -1,4 +1,6 @@
-mode: ContinuousDeployment
+workflow: GitHubFlow/v1
+strategies:
+  - Mainline
 tag-prefix: ""
 commit-message-incrementing: Enabled
 
@@ -15,5 +17,5 @@ branches:
 
   feature:
     regex: '^features?[\/-](?<BranchName>.+)'
-    increment: Patch
+    increment: Inherit
     label: "{BranchName}"
